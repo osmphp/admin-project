@@ -1,0 +1,29 @@
+{
+    "name": "osmphp/admin-project",
+    "description": "A template for projects powered by Osm Admin",
+    "license": "GPL-3.0-only",
+    "authors": [
+        {
+            "name": "Vladislav Osmianskij",
+            "email": "vlaosm@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "osmphp/admin": "^0.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    },
+    "autoload": {
+        "psr-4": {
+            "My\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "My\\Tests\\": "tests/",
+            "My\\Samples\\": "samples/"
+        }
+    }
+}
