@@ -1,0 +1,39 @@
+image:
+  file: .gitpod.dockerfile
+
+tasks:
+  - name: Install And Run
+    before: |
+      npm install -g gulp-cli
+      mysql -u root -e "CREATE DATABASE IF NOT EXISTS osm"
+    init: |
+      bin/create-env.sh
+      sed -i "s|MYSQL_USERNAME=\\.\\.\\.|MYSQL_USERNAME=root|g" .env.Osm_App
+      sed -i "s|MYSQL_PASSWORD=\\.\\.\\.|MYSQL_PASSWORD=|g" .env.Osm_App
+      sed -i "s|NAME=\\.\\.\\.|NAME=osm|g" .env.Osm_App
+      echo "HTTPS=true" >> .env.Osm_App
+      bin/install.sh
+      php vendor/osmphp/core/bin/hint.php
+    command: |
+      sudo service elasticsearch start
+      php vendor/osmphp/framework/bin/console.php migrate:up
+      php -S 0.0.0.0:8000 -t public/Osm_App public/Osm_App/router.php
+
+ports:
+  - name: Web App
+    port: 8000
+    onOpen: open-browser
+  - name: Mysql
+    port: 3306
+    visibility: private
+  - name: ElasticSearch
+    port: 9200
+    visibility: private
+  - name: ElasticSearch Admin
+    port: 9300
+    visibility: private
+
+jetbrains:
+  phpstorm:
+    prebuilds:
+      version: stable
